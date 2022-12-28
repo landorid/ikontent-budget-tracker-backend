@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsInt, IsEnum, IsNumberString } from 'class-validator';
+import { IsNotEmpty, IsInt, IsEnum } from 'class-validator';
 import { TransactionType } from '../transaction-type.enum';
 
 export class CreateTransactionDto {
