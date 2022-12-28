@@ -36,4 +36,12 @@ export class TransactionsService {
 
     return result;
   }
+
+  async deleteTransaction(id: string): Promise<void> {
+    const result = await this.transactionsRepository.delete({ id });
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Transaction with ID ${id} not found!`);
+    }
+  }
 }
