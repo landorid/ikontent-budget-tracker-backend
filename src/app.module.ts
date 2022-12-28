@@ -25,6 +25,7 @@ import { configValidationSchema } from './config.schema';
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_DATABASE'),
           autoLoadEntities: true,
+          synchronize: true,
         };
       },
     }),
