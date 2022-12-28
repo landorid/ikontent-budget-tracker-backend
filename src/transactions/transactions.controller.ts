@@ -1,5 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { GetTransactionsFilterDto } from './dto/get-transactions-filter.dto';
 import { Transaction } from './transaction.entity';
 import { TransactionsService } from './transactions.service';
 
@@ -7,16 +16,23 @@ import { TransactionsService } from './transactions.service';
 export class TransactionsController {
   constructor(private transactionsService: TransactionsService) {}
 
+  @Get()
+  getTransaction(
+    @Query() filterDto: GetTransactionsFilterDto,
+  ): Promise<Transaction[]> {
+    return this.transactionsService.getTransactions(filterDto);
+  }
+
+  @Get('/:id')
+  getTransactions(@Param('id') id: string) {
+    return this.transactionsService.getTransactionById(id);
+  }
+
   @Post()
   createTransaction(
     @Body() createTransactionDto: CreateTransactionDto,
   ): Promise<Transaction> {
     return this.transactionsService.createTransaction(createTransactionDto);
-  }
-
-  @Get('/:id')
-  getTask(@Param('id') id: string) {
-    return this.transactionsService.getTransactionById(id);
   }
 
   @Delete('/:id')
