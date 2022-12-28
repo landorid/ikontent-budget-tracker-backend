@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ExpensesModule } from './expenses/expenses.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ConfigModule } from '@nestjs/config';
+import { TransactionsModule } from './transactions/transactions.module';
+
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 
 @Module({
@@ -10,7 +12,22 @@ import { configValidationSchema } from './config.schema';
       envFilePath: [`.env.${process.env.STAGE}`],
       validationSchema: configValidationSchema,
     }),
-    ExpensesModule,
+    TransactionsModule,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          type: 'postgres',
+          host: configService.get('DB_HOST'),
+          port: configService.get('DB_PORT'),
+          username: configService.get('DB_USERNAME'),
+          password: configService.get('DB_PASSWORD'),
+          database: configService.get('DB_DATABASE'),
+          autoLoadEntities: true,
+        };
+      },
+    }),
   ],
   controllers: [],
   providers: [],
